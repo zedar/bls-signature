@@ -8,4 +8,7 @@ use clap::Parser;
 pub struct Config {
     #[arg(short = 't', long = "target-path")]
     pub target_path: std::path::PathBuf,
+
+    #[arg(short = 'o', long = "overwrite", default_value_t = false)]
+    pub overwrite: bool,
 }
