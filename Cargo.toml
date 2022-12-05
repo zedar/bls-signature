@@ -12,6 +12,7 @@ ark-ec = "0.3"
 ark-serialize = "0.3"
 ark-bls12-381 = "0.3"
 ark-crypto-primitives = "0.3"
+blake2s_simd = "0.5"
 
 rand = "0.8"
 rand_chacha = "0.3"
