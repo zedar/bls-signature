@@ -1,3 +1,3 @@
 pub mod hash;
-pub mod keysgen;
-pub mod siggen;
+pub mod keys;
+pub mod signature;

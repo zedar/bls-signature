@@ -1,14 +1,14 @@
 use ark_serialize::Write;
-use bls_signature::keysgen;
+use bls_signature::keys;
 use clap::Parser;
 
 fn main() {
     println!("Secret and public key generator");
 
-    let cfg = keysgen::Config::parse();
+    let cfg = keys::Config::parse();
     println!("CFG: {:?}", cfg);
 
-    let keys = match keysgen::generate() {
+    let keys = match keys::generate() {
         Err(err) => {
             println!("Error: {}", err);
             std::process::exit(1)

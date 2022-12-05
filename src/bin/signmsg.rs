@@ -1,11 +1,11 @@
 use ark_serialize::Write;
-use bls_signature::siggen;
+use bls_signature::signature;
 use clap::Parser;
 
 fn main() {
     println!("Signature generator");
 
-    let cfg = siggen::Config::parse();
+    let cfg = signature::Config::parse();
     println!("CFG: {:?}", cfg);
 
     let sk = match std::fs::read_to_string(cfg.sk_file.as_path()) {
@@ -33,7 +33,7 @@ fn main() {
         },
     };
 
-    let sig = match siggen::sign(sk, msg) {
+    let sig = match signature::sign(sk, msg) {
         Err(err) => {
             println!("Error signing a message: {}", err);
             std::process::exit(1)
