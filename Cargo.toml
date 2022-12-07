@@ -22,3 +22,7 @@ hex = "0.4"
 
 # command line argument parser
 clap = {version="4.0", features=["derive"]}
+
+# logging
+log = "0.4"
+simple_logger = "4.0"

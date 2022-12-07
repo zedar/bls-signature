@@ -1,13 +1,16 @@
 use bls_signature::signature;
 use clap::Parser;
+use log::{debug, error, info};
 
 fn main() {
+    simple_logger::init_with_level(log::Level::Debug).unwrap();
+
     let cfg = signature::ValidateConfig::parse();
-    println!("CFG: {:?}", cfg);
+    debug!("CFG: {:?}", cfg);
 
     let sig = match std::fs::read_to_string(cfg.sig_file) {
         Err(err) => {
-            println!("Error reading signature file: {}", err);
+            error!("Error reading signature file: {}", err);
             std::process::exit(1)
         }
         Ok(sig) => sig,
@@ -15,7 +18,7 @@ fn main() {
 
     let pk = match std::fs::read_to_string(cfg.pk_file) {
         Err(err) => {
-            println!("Error reading public key file: {}", err);
+            error!("Error reading public key file: {}", err);
             std::process::exit(1)
         }
         Ok(pk) => pk,
@@ -25,12 +28,12 @@ fn main() {
         Some(msg) => msg,
         None => match cfg.msg_file {
             None => {
-                println!("Missing message or message file");
+                error!("Missing message or message file");
                 std::process::exit(1)
             }
             Some(msg_file) => match std::fs::read_to_string(msg_file) {
                 Err(err) => {
-                    println!("Error reading message file: {}", err);
+                    error!("Error reading message file: {}", err);
                     std::process::exit(1)
                 }
                 Ok(msg) => msg,
@@ -40,10 +43,10 @@ fn main() {
 
     match signature::validate(pk, msg, sig) {
         Err(err) => {
-            println!("Error validating signature: {}", err);
+            error!("Error validating signature: {}", err);
             std::process::exit(1)
         }
-        Ok(true) => println!("VALID signature"),
-        Ok(false) => println!("INVALID signature"),
+        Ok(true) => info!("VALID signature"),
+        Ok(false) => info!("INVALID signature"),
     }
 }

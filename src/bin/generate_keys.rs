@@ -1,16 +1,17 @@
 use ark_serialize::Write;
 use bls_signature::keys;
 use clap::Parser;
+use log::{debug, error, info};
 
 fn main() {
-    println!("Secret and public key generator");
+    simple_logger::init_with_level(log::Level::Debug).unwrap();
 
     let cfg = keys::Config::parse();
-    println!("CFG: {:?}", cfg);
+    debug!("CFG: {:?}", cfg);
 
     let keys = match keys::generate() {
         Err(err) => {
-            println!("Error: {}", err);
+            error!("Error: {}", err);
             std::process::exit(1)
         }
         Ok(keys) => keys,
@@ -21,14 +22,14 @@ fn main() {
     sk_path.push("sk.txt");
     if sk_path.as_path().exists() {
         if !cfg.overwrite {
-            println!(
+            error!(
                 "Secret key file already exists: {}",
                 sk_path.as_path().display()
             );
             std::process::exit(1)
         } else {
             if let Err(err) = std::fs::remove_file(sk_path.as_path()) {
-                println!("Error removing secret key file: {}", err);
+                error!("Error removing secret key file: {}", err);
                 std::process::exit(1)
             }
         }
@@ -38,14 +39,14 @@ fn main() {
     pk_path.push("pk.txt");
     if pk_path.as_path().exists() {
         if !cfg.overwrite {
-            println!(
+            error!(
                 "Public key file already exists: {}",
                 pk_path.as_path().display()
             );
             std::process::exit(1)
         } else {
             if let Err(err) = std::fs::remove_file(pk_path.as_path()) {
-                println!("Error removing public key file: {}", err);
+                error!("Error removing public key file: {}", err);
                 std::process::exit(1)
             }
         }
@@ -53,7 +54,7 @@ fn main() {
 
     let mut sk_file = match std::fs::File::create(sk_path.as_path()) {
         Err(err) => {
-            println!("Error creating secret key file: {}", err);
+            error!("Error creating secret key file: {}", err);
             std::process::exit(1)
         }
         Ok(file) => file,
@@ -61,15 +62,15 @@ fn main() {
 
     match sk_file.write_all(hex::encode_upper(&keys.secret_key).as_bytes()) {
         Err(err) => {
-            println!("Error writing secret key file: {}", err);
+            error!("Error writing secret key file: {}", err);
             std::process::exit(1)
         }
-        Ok(_) => println!("Secret key file created"),
+        Ok(_) => info!("Secret key file created"),
     }
 
     let mut pk_file = match std::fs::File::create(pk_path.as_path()) {
         Err(err) => {
-            println!("Error creating public key file: {}", err);
+            error!("Error creating public key file: {}", err);
             std::process::exit(1)
         }
         Ok(file) => file,
@@ -77,9 +78,9 @@ fn main() {
 
     match pk_file.write_all(hex::encode(&keys.public_key).as_bytes()) {
         Err(err) => {
-            println!("Error writing public key file: {}", err);
+            error!("Error writing public key file: {}", err);
             std::process::exit(1)
         }
-        Ok(_) => println!("Public key file created!"),
+        Ok(_) => info!("Public key file created!"),
     }
 }
