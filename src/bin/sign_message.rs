@@ -3,8 +3,6 @@ use bls_signature::signature;
 use clap::Parser;
 
 fn main() {
-    println!("Signature generator");
-
     let cfg = signature::Config::parse();
     println!("CFG: {:?}", cfg);
 

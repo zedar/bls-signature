@@ -7,7 +7,7 @@ use clap::{ArgGroup, Parser};
 #[command(author, version, about, long_about=None)]
 #[command(group(ArgGroup::new("msgs").required(true).args(["msg", "msg_file"])))]
 pub struct Config {
-    #[arg(short = 's', long = "sk-path")]
+    #[arg(short = 's', long = "sk-file")]
     pub sk_file: std::path::PathBuf,
 
     #[arg(long = "msg")]
@@ -21,4 +21,21 @@ pub struct Config {
 
     #[arg(short = 'o', long = "overwrite", default_value_t = false)]
     pub overwrite: bool,
+}
+
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about=None)]
+#[command(group(ArgGroup::new("msgs").required(true).args(["msg", "msg_file"])))]
+pub struct ValidateConfig {
+    #[arg(long = "sig-file")]
+    pub sig_file: std::path::PathBuf,
+
+    #[arg(long = "pk-file")]
+    pub pk_file: std::path::PathBuf,
+
+    #[arg(long = "msg")]
+    pub msg: Option<String>,
+
+    #[arg(long = "msg-file")]
+    pub msg_file: Option<std::path::PathBuf>,
 }
